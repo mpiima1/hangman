@@ -71,12 +71,8 @@ class _HomepageState extends State<Homepage> {
   String gmspsd;
   String gmsfld;
   String oldchances;
-  void _setmystate(_) {
-    setState(() {});
-  }
 
   Future<bool> loadData() async {
-    //await writedammy('svddummy.txt', 'woooww');
     svddummy = await _readData('svddummy.txt');
     svdword = await _readData('svdword.txt');
     finState = await _readData('finstate.txt');
@@ -137,7 +133,17 @@ class _HomepageState extends State<Homepage> {
               children: <Widget>[
                 finState == 'false'
                     ? RaisedButton(
-                        onPressed: null, //_onpressed2,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Gamelogic(
+                                        finished: finState,
+                                        oldchances: oldchances,
+                                        oldword: svdword,
+                                        olddummy: svddummy,
+                                      ))).then(onGoBack);
+                        },
                         child: Text(
                           'resume',
                           style: TextStyle(letterSpacing: 2.0),
@@ -151,13 +157,8 @@ class _HomepageState extends State<Homepage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Gamelogic(
-                                  finished: finState,
-                                  oldchances: oldchances,
-                                  olddummy: svddummy,
-                                  oldword: svdword,
-                                  setmystate: _setmystate,
-                                ))).then(onGoBack);
+                            builder: (context) =>
+                                Gamelogic(finished: 'true'))).then(onGoBack);
                   },
                   child: Text(
                     'newgame',
@@ -213,15 +214,13 @@ class Gamelogic extends StatefulWidget {
   String oldword;
   String olddummy;
   String oldchances;
-  final ValueChanged<void> setmystate;
-  Gamelogic(
-      {Key key,
-      this.finished,
-      this.oldchances,
-      this.olddummy,
-      this.oldword,
-      this.setmystate})
-      : super(key: key);
+  Gamelogic({
+    Key key,
+    this.finished,
+    this.oldchances,
+    this.olddummy,
+    this.oldword,
+  }) : super(key: key);
   @override
   _GamelogicState createState() => _GamelogicState();
 }
@@ -347,23 +346,18 @@ class _GamelogicState extends State<Gamelogic> {
         text = key.text;
         if (!_oneofkeys()) {
           chances = chances - 1;
-          widget.oldchances = chances.toString();
         } else {
           dummy = _updatedummy();
-          widget.olddummy = dummy;
         }
         writedammy('svddummy.txt', dummy);
         writedammy('oldchances.txt', chances.toString());
         writedammy('finstate.txt', 'false');
-        widget.setmystate(null);
-        widget.finished = 'false';
       } else {}
-    } else {
-      newgames = 0;
-      writedammy('finstate.txt', 'true');
-      widget.finished = 'true';
-      widget.setmystate(null);
-      chances = 10;
+      if (chances == 0 || dummy == word) {
+        newgames = 0;
+        writedammy('finstate.txt', 'true');
+        chances = 10;
+      }
     }
     setState(() {});
   }
@@ -399,14 +393,7 @@ class _GamelogicState extends State<Gamelogic> {
       if (newgames == 1) {
         return Column(
           children: <Widget>[
-            Text(
-                dummy +
-                    '  ' +
-                    word +
-                    '  ' +
-                    dummy.length.toString() +
-                    ' ' +
-                    chances.toString(),
+            Text(dummy + chances.toString(),
                 style: TextStyle(
                   color: Colors.yellow,
                   letterSpacing: 3.0,
@@ -429,7 +416,7 @@ class _GamelogicState extends State<Gamelogic> {
         if (word == dummy) {
           return Column(
             children: <Widget>[
-              Text('congs'),
+              Text('congs the word is: ' + word),
               SizedBox(
                 height: 20,
               ),
@@ -450,7 +437,7 @@ class _GamelogicState extends State<Gamelogic> {
         } else {
           return Column(
             children: <Widget>[
-              Text('sorry'),
+              Text('sorry, the word is: ' + word),
               SizedBox(
                 height: 20,
               ),
