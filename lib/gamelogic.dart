@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:virtual_keyboard/virtual_keyboard.dart';
 
 Future<String> _localpaths() async {
-  final directory = (await getApplicationDocumentsDirectory()).path;
+  final directory = _localPath();
   final data = await rootBundle.loadString('assets/wordlist.txt');
   final file = await File('$directory/wordlist.txt').writeAsString(data);
   return file.readAsString();
