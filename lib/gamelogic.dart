@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:virtual_keyboard/virtual_keyboard.dart';
 
 Future<String> _localpaths() async {
-  final directory = _localPath();
+  final directory = (await getApplicationDocumentsDirectory()).path;
   final data = await rootBundle.loadString('assets/wordlist.txt');
   final file = await File('$directory/wordlist.txt').writeAsString(data);
   return file.readAsString();
@@ -75,6 +75,7 @@ class _GamelogicState extends State<Gamelogic> {
             dummy = dummyString(word);
             writedammy('svdword.txt', word);
             writedammy('svddummy.txt', dummy);
+            writedammy('finstate.txt', 'true');
           } else {
             word = widget.oldword;
             dummy = widget.olddummy;
@@ -89,9 +90,12 @@ class _GamelogicState extends State<Gamelogic> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[800],
+      backgroundColor: Colors.grey[700],
       appBar: AppBar(
-        title: Text('Hangman'),
+        title: Text(
+          'Hangman',
+          style: TextStyle(letterSpacing: 2.0, color: Colors.yellow),
+        ),
         centerTitle: true,
         backgroundColor: Colors.grey[850],
         elevation: 0.0,
@@ -110,48 +114,8 @@ class _GamelogicState extends State<Gamelogic> {
             SizedBox(
               height: 40,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Name:   ',
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    letterSpacing: 2.0,
-                  ),
-                ),
-                Text(
-                  'Mpiima',
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    letterSpacing: 2.0,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Score',
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    letterSpacing: 2.0,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 30,
-            ),
             Center(
               child: getWidget(),
-            ),
-            SizedBox(
-              height: 20,
             ),
           ],
         ),
@@ -212,10 +176,21 @@ class _GamelogicState extends State<Gamelogic> {
       if (newgames == 1) {
         return Column(
           children: <Widget>[
-            Text(dummy + chances.toString(),
+            Text(
+              chances.toString(),
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.yellow,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(dummy,
                 style: TextStyle(
                   color: Colors.yellow,
-                  letterSpacing: 3.0,
+                  letterSpacing: 4.0,
+                  fontSize: 20,
                 )),
             SizedBox(
               height: 10,
@@ -235,7 +210,13 @@ class _GamelogicState extends State<Gamelogic> {
         if (word == dummy) {
           return Column(
             children: <Widget>[
-              Text('congs the word is: ' + word),
+              Text(
+                'congs the word is: ' + word,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.yellow,
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -256,7 +237,13 @@ class _GamelogicState extends State<Gamelogic> {
         } else {
           return Column(
             children: <Widget>[
-              Text('sorry, the word is: ' + word),
+              Text(
+                'sorry, the word is: ' + word,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.yellow,
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
