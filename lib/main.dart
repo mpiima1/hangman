@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'gamelogic.dart';
@@ -15,11 +16,16 @@ void main(List<String> args) {
 class Hangman extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return Scaffold(
-      backgroundColor: Colors.green[600],
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: Text('Hangman'),
-        backgroundColor: Colors.grey[600],
+        title: Center(
+            child: Text(
+          'Hangman',
+          style: TextStyle(letterSpacing: 2.0, color: Colors.yellow),
+        )),
+        backgroundColor: Colors.grey[700],
       ),
       body: Homepage(),
     );
@@ -89,90 +95,79 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      //height: 300,
       padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                'Lubuulwa         ',
-                style: TextStyle(
-                    letterSpacing: 2.0,
-                    fontSize: 12,
-                    color: Colors.yellow[300]),
-              ),
-              RaisedButton(
-                onPressed: null, //_onpressed1,
-                child: Text(
-                  'statistics',
-                  style: TextStyle(
-                    letterSpacing: 2.0,
-                    fontSize: 12,
-                    color: Colors.yellow[300],
-                  ),
-                ),
-              )
-            ],
+          Expanded(
+            flex: 3,
+            child: Container(
+              height: 400,
+            ),
           ),
           SizedBox(
             height: 20,
           ),
-          Center(
-            child: Column(
-              children: <Widget>[
-                finState == 'false'
-                    ? RaisedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Gamelogic(
-                                        finished: finState,
-                                        oldchances: oldchances,
-                                        oldword: svdword,
-                                        olddummy: svddummy,
-                                      ))).then(onGoBack);
-                        },
-                        child: Text(
-                          'resume',
-                          style: TextStyle(letterSpacing: 2.0),
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  finState == 'false'
+                      ? Container(
+                          width: 120,
+                          child: RaisedButton(
+                            color: Colors.black,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Gamelogic(
+                                            finished: finState,
+                                            oldchances: oldchances,
+                                            oldword: svdword,
+                                            olddummy: svddummy,
+                                          ))).then(onGoBack);
+                            },
+                            child: Text(
+                              'resume',
+                              style: TextStyle(
+                                  letterSpacing: 2.0, color: Colors.yellow),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 1,
                         ),
-                      )
-                    : SizedBox(
-                        height: 1,
-                      ),
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Gamelogic(finished: 'true'))).then(onGoBack);
-                  },
-                  child: Text(
-                    'newgame',
-                    style: TextStyle(
-                      letterSpacing: 2.0,
-                      color: Colors.yellow[300],
-                    ),
-                  ),
-                )
-                /* DropdownButton(items: [
-                  DropdownMenuItem(
+                  SizedBox(height: 10),
+                  Container(
+                    width: 120,
                     child: RaisedButton(
+                      color: Colors.black,
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Gamelogic()));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Gamelogic(finished: 'true')))
+                            .then(onGoBack);
                       },
-                      child: Text('animals'),
+                      child: Text(
+                        'newgame',
+                        style: TextStyle(
+                          letterSpacing: 2.0,
+                          color: Colors.yellow[300],
+                        ),
+                      ),
                     ),
                   )
-                ], onChanged: null),*/
-              ],
+                ],
+              ),
             ),
-          )
+          ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
