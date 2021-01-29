@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:virtual_keyboard/virtual_keyboard.dart';
+import 'newkeybord.dart';
 
 Future<String> _localpaths() async {
   final directory = (await getApplicationDocumentsDirectory()).path;
@@ -97,11 +98,10 @@ class _GamelogicState extends State<Gamelogic> {
           style: TextStyle(letterSpacing: 2.0, color: Colors.yellow),
         ),
         centerTitle: true,
-        backgroundColor: Colors.grey[850],
+        backgroundColor: Colors.grey[900],
         elevation: 0.0,
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+      body: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -123,19 +123,18 @@ class _GamelogicState extends State<Gamelogic> {
     );
   }
 
-  _onkeypres(VirtualKeyboardKey key) {
+  _onkeypres(String mykey) {
     if (chances != 0 && dummy != word) {
-      if (key.keyType == VirtualKeyboardKeyType.String) {
-        text = key.text;
-        if (!_oneofkeys()) {
-          chances = chances - 1;
-        } else {
-          dummy = _updatedummy();
-        }
-        writedammy('svddummy.txt', dummy);
-        writedammy('oldchances.txt', chances.toString());
-        writedammy('finstate.txt', 'false');
-      } else {}
+      text = mykey;
+      if (!_oneofkeys()) {
+        chances = chances - 1;
+      } else {
+        dummy = _updatedummy();
+      }
+      writedammy('svddummy.txt', dummy);
+      writedammy('oldchances.txt', chances.toString());
+      writedammy('finstate.txt', 'false');
+
       if (chances == 0 || dummy == word) {
         newgames = 0;
         writedammy('finstate.txt', 'true');
@@ -197,11 +196,8 @@ class _GamelogicState extends State<Gamelogic> {
             ),
             Container(
               color: Colors.grey[700],
-              child: VirtualKeyboard(
-                type: VirtualKeyboardType.Alphanumeric,
-                onKeyPress: _onkeypres,
-                textColor: Colors.white,
-                height: 250,
+              child: CustomKeyboard(
+                onTextInput: (mytext) => _onkeypres(mytext),
               ),
             )
           ],
