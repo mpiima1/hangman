@@ -7,9 +7,11 @@ class CustomKeyboard extends StatelessWidget {
   CustomKeyboard({
     Key key,
     this.onTextInput,
+    this.nulified,
   }) : super(key: key);
 
   final ValueSetter<String> onTextInput;
+  final String nulified;
 
   void _textInputHandler(String text) => onTextInput?.call(text);
 
@@ -20,23 +22,24 @@ class CustomKeyboard extends StatelessWidget {
       color: Colors.blue,
       child: Column(
         children: [
-          buildRow(row1),
-          buildRow(row2),
-          buildRow(row3),
+          buildRow(row1, nulified),
+          buildRow(row2, nulified),
+          buildRow(row3, nulified),
         ],
       ),
     );
   }
 
-  Expanded buildRow(List<String> chars) {
+  Expanded buildRow(List<String> chars, String nullify) {
     return Expanded(
       child: Row(
         children: [
           for (var item in chars)
             TextKey(
+              nulling: nullify,
               text: item,
               onTextInput: _textInputHandler,
-            )
+            ),
         ],
       ),
     );
@@ -49,7 +52,9 @@ class TextKey extends StatelessWidget {
     @required this.text,
     this.onTextInput,
     this.flex = 1,
+    this.nulling,
   }) : super(key: key);
+  final String nulling;
 
   final String text;
   final ValueSetter<String> onTextInput;
@@ -59,21 +64,17 @@ class TextKey extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex,
-      child: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: Material(
-          color: Colors.grey[900],
-          child: InkWell(
-            onTap: () {
-              onTextInput?.call(text);
-            },
-            child: Container(
-              child: Center(
-                  child: Text(
-                text,
-                style: TextStyle(fontSize: 18, color: Colors.yellow),
-              )),
-            ),
+      child: Material(
+        color: !nulling.contains(text) ? Colors.grey[900] : Colors.grey[700],
+        child: InkWell(
+          onTap: () => !nulling.contains(text) ? onTextInput?.call(text) : null,
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: Center(
+                child: Text(
+              text,
+              style: TextStyle(fontSize: 18, color: Colors.yellow),
+            )),
           ),
         ),
       ),

@@ -66,6 +66,7 @@ class _HomepageState extends State<Homepage> {
   String gmspsd;
   String gmsfld;
   String oldchances;
+  String nullify;
 
   Future<bool> loadData() async {
     svddummy = await _readData('svddummy.txt');
@@ -75,6 +76,7 @@ class _HomepageState extends State<Homepage> {
     gmspsd = await _readData('gmspsd.txt');
     gmsfld = await _readData('gmsfld.txt');
     oldchances = await _readData('oldchances.txt');
+    nullify = await _readData('nullified.txt');
     return false;
   }
 
@@ -127,6 +129,7 @@ class _HomepageState extends State<Homepage> {
                                             oldchances: oldchances,
                                             oldword: svdword,
                                             olddummy: svddummy,
+                                            nulified: nullify,
                                           ))).then(onGoBack);
                             },
                             child: Text(

@@ -34,12 +34,14 @@ class Gamelogic extends StatefulWidget {
   final String oldword;
   final String olddummy;
   final String oldchances;
+  final String nulified;
   Gamelogic({
     Key key,
     this.finished,
     this.oldchances,
     this.olddummy,
     this.oldword,
+    this.nulified,
   }) : super(key: key);
   @override
   _GamelogicState createState() => _GamelogicState();
@@ -58,6 +60,7 @@ class _GamelogicState extends State<Gamelogic> {
   LineSplitter ls = new LineSplitter();
   int states = 0;
   int newgames = 1;
+  String nulified;
 
   /* _GamelogicState() {
     _localpaths().then((value) => setState(() {
@@ -77,11 +80,13 @@ class _GamelogicState extends State<Gamelogic> {
             writedammy('svdword.txt', word);
             writedammy('svddummy.txt', dummy);
             writedammy('finstate.txt', 'true');
+            nulified = '0';
           } else {
             word = widget.oldword;
             dummy = widget.olddummy;
             leng = dummy.length;
             chances = int.parse(widget.oldchances);
+            nulified = widget.nulified;
           }
 
           loading = false;
@@ -126,6 +131,7 @@ class _GamelogicState extends State<Gamelogic> {
   _onkeypres(String mykey) {
     if (chances != 0 && dummy != word) {
       text = mykey;
+      nulified = nulified + mykey;
       if (!_oneofkeys()) {
         chances = chances - 1;
       } else {
@@ -134,11 +140,13 @@ class _GamelogicState extends State<Gamelogic> {
       writedammy('svddummy.txt', dummy);
       writedammy('oldchances.txt', chances.toString());
       writedammy('finstate.txt', 'false');
+      writedammy('nullified.txt', nulified);
 
       if (chances == 0 || dummy == word) {
         newgames = 0;
         writedammy('finstate.txt', 'true');
         chances = 10;
+        nulified = '0';
       }
     }
     setState(() {});
@@ -198,6 +206,7 @@ class _GamelogicState extends State<Gamelogic> {
               color: Colors.grey[700],
               child: CustomKeyboard(
                 onTextInput: (mytext) => _onkeypres(mytext),
+                nulified: nulified,
               ),
             )
           ],
