@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:virtual_keyboard/virtual_keyboard.dart';
-import 'newkeybord.dart';
+import 'newkeyboard.dart';
 
 Future<String> _localpaths() async {
   final directory = (await getApplicationDocumentsDirectory()).path;
