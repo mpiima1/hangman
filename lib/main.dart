@@ -81,7 +81,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   FutureOr onGoBack(dynamic value) async {
-    var name = await loadData();
+    await loadData();
     setState(() {});
   }
 
