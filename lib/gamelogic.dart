@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:virtual_keyboard/virtual_keyboard.dart';
 import 'newkeyboard.dart';
 
 Future<String> _localpaths() async {
@@ -203,10 +202,19 @@ class _GamelogicState extends State<Gamelogic> {
               height: 10,
             ),
             Container(
-              color: Colors.grey[700],
-              child: CustomKeyboard(
-                onTextInput: (mytext) => _onkeypres(mytext),
-                nulified: nulified,
+              color: Colors.black,
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Expanded(
+                    child: CustomKeyboard(
+                      onTextInput: (mytext) => _onkeypres(mytext),
+                      nulified: nulified,
+                    ),
+                  ),
+                ],
               ),
             )
           ],
